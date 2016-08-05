@@ -1,5 +1,6 @@
-require(ggplot2)
-require(RJSONIO)
+library(RJSONIO)
+library(ggplot2)
+library(maps)
 
 loc_file <- "data/loc_history.json"
 
@@ -32,4 +33,13 @@ gmaps_json_to_latlong <- function(loc_file) {
 ldf <- gmaps_json_to_latlong(loc_file)
 
 ## Filter only days in trip
-trip <- ldf[ldf$date > as.Date("2016-07-21"),]
+trip <- ldf[ldf$date > as.Date("2016-07-28"),]
+trip$long <- trip$longitudeE7 / 10^7
+trip$lat <- trip$latitudeE7 / 10^7
+
+## Map stuff
+states <- map_data("state")
+trip_map <- ggplot()+
+         geom_map(data=states, map=states, aes(x=long, y=lat, map_id=region),
+                  fill="#ffffff", color="grey70", size=0.15)+
+         geom_path(data=trip, aes(x=long, y=lat))
