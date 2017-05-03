@@ -5,6 +5,7 @@ library(maps)
 library(ggrepel)
 
 loc_file <- "data/loc_history.json"
+cities_file <- "data/cities.csv"
 
 gmaps_json_to_latlong <- function(loc_file) {
     ## Read and convert JSON location file to a dataframe of the form
@@ -47,7 +48,7 @@ trip <- trip[trip$lat > 33,]
 
 ## Data
 states <- map_data("state")
-cities <- read.csv("data/cities.csv")
+cities <- read.csv(cities_file)
 
 trip_map <- ggplot()+
          ggtitle("Roadtrip 2016", subtitle="NYC to YVR")+
