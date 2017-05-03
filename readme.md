@@ -1,6 +1,6 @@
 # Roadtrip
 
-[[https://github.com/epsalt/roadtrip/output/roadtrip.svg|alt=roadtrip]]
+![roadtrip map](/output/roadtrip.png?raw=true)
 
 This repository contains the R code I used to map my roadtrip across the
 United States.
