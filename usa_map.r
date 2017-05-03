@@ -9,13 +9,13 @@ loc_file <- "data/loc_history.json"
 gmaps_json_to_latlong <- function(loc_file) {
     ## Read and convert JSON location file to a dataframe of the form
     ## timestamp (date) | lat (string) | long (string)
-    
-    ## Parse JSON 
+
+    ## Parse JSON
     loc <- RJSONIO::fromJSON(loc_file)
 
     ## Drop everything except timestamp, lat, long
     dropped <- lapply(loc[[1]], function(a) a[1:3])
-    
+
     loc_df <- do.call(rbind.data.frame, c(dropped, stringsAsFactors=FALSE))
 
     ## Create date column
@@ -25,7 +25,7 @@ gmaps_json_to_latlong <- function(loc_file) {
         {./1000} %>% ## Because we have miliseconds
         as.POSIXct(origin="1970-01-01") %>%
         as.Date
-    
+
     return(loc_df)
 }
 
@@ -50,7 +50,7 @@ states <- map_data("state")
 cities <- read.csv("data/cities.csv")
 
 trip_map <- ggplot()+
-         ggtitle("Roadtrip 2016", subtitle="NYC to YVR")+ 
+         ggtitle("Roadtrip 2016", subtitle="NYC to YVR")+
          geom_map(data=states, map=states,
                   aes(x=long, y=lat, map_id=region),
                   fill="#ffffff", color="grey70", size=0.4)+
