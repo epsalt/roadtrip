@@ -31,11 +31,18 @@ gmaps_json_to_latlong <- function(loc_file) {
 ldf <- gmaps_json_to_latlong(loc_file)
 
 ## Filter only days in trip
-trip <- ldf[ldf$date > as.Date("2016-07-28"),]
+trip <- ldf[ldf$date > as.Date("2016-07-28") &
+            ldf$date < as.Date("2016-08-15"),]
+
+## Units
 trip$long <- trip$longitudeE7 / 10^7
 trip$lat <- trip$latitudeE7 / 10^7
 
 ## Map stuff
+## Remove outliers
+trip <- trip[trip$long < -50,]
+trip <- trip[trip$lat > 33,]
+
 states <- map_data("state")
 trip_map <- ggplot()+
          geom_map(data=states, map=states, aes(x=long, y=lat, map_id=region),
