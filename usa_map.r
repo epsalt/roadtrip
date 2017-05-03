@@ -1,5 +1,6 @@
 library(RJSONIO)
 library(ggplot2)
+library(magrittr)
 library(maps)
 
 loc_file <- "data/loc_history.json"
@@ -10,23 +11,20 @@ gmaps_json_to_latlong <- function(loc_file) {
     
     ## Parse JSON 
     loc <- RJSONIO::fromJSON(loc_file)
-    print(paste(Sys.time(), "JSON loaded to memory"))
 
     ## Drop everything except timestamp, lat, long
     dropped <- lapply(loc[[1]], function(a) a[1:3])
-    print(paste(Sys.time(), "All data dropped except timestamp, lat, and long"))
     
-    loc_df <- do.call(rbind.data.frame, dropped)
-    print(paste(Sys.time(), "List converted to data frame"))
+    loc_df <- do.call(rbind.data.frame, c(dropped, stringsAsFactors=FALSE))
 
-    ## Create date and posix columns from timestamp
-    loc_df$posix <- as.character(loc_df$timestampMs)
-    loc_df$posix <- as.numeric(loc_df$posix)
-    loc_df$posix <- as.POSIXct((loc_df$posix+0.1)/1000, origin="1970-01-01")
-    loc_df$date <- as.Date(loc_df$posix)
-    print(paste(Sys.time(), "Date and Posix columns created from timestamp"))
+    ## Create date column
+    loc_df$date <-
+        loc_df$timestampMs %>%
+        as.numeric %>%
+        {./1000} %>% ## Because we have miliseconds
+        as.POSIXct(origin="1970-01-01") %>%
+        as.Date
     
-    print(paste(Sys.time(), "All done"))
     return(loc_df)
 }
 
