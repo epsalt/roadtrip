@@ -44,9 +44,7 @@ trip$lat <- trip$latitudeE7 / 10^7
 trip <- trip[trip$long < -50,]
 trip <- trip[trip$lat > 33,]
 
-## Map stuff
-
-## Data
+## Additional map data
 states <- map_data("state")
 cities <- read.csv(cities_file)
 
